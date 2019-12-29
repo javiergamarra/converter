@@ -1,33 +1,42 @@
 import React, {useState} from 'react';
 import './App.css';
-import Amount from "./Amount";
 import ThemeContext from "./ThemeContext";
+import Converter from "./Converter";
 
 function App() {
 
-    const [value, setValue] = useState(0);
-    const [exchangeRate, setExchangeRate] = useState(Math.random() * 10000);
+    const [premium, setPremium] = useState(false);
     const [theme, setTheme] = useState('light');
-    let timeout;
+    const [maxConversions, setMaxConversions] = useState(false);
 
-    const _onChange = value => {
-        clearTimeout(timeout);
+    let conversions = 5;
 
-        setValue(value);
-
-        timeout = setTimeout(() => setExchangeRate(0), 5000);
+    const onChange = () => {
+        conversions--;
+        if (conversions === 0 && !premium) {
+            setMaxConversions(true);
+        }
     };
 
     return (
-        <ThemeContext.Provider value={{theme}}>
+        <ThemeContext.Provider value={{theme: theme, premium: premium}}>
+
+            {maxConversions && <div>freemium conversion model failed</div>}
 
             <select onChange={event => setTheme(event.target.value)} value={theme}>
                 <option value="dark">Dark</option>
                 <option value="light">Light</option>
             </select>
 
-            <Amount name="Euros" value={value} onChange={_onChange}/>
-            <Amount name="BTC" value={value * exchangeRate} disabled onChange={value => setValue(value)}/>
+            <Converter cryptoName={"BTC"} header={"My BTC Converter"} exchangeRate={2} onChange={onChange}/>
+
+            <Converter cryptoName={"ETH"} exchangeRate={1.2} onChange={onChange}/>
+
+            {!premium ?
+                (<button onClick={() => setPremium(true)}>Become Premium</button>) :
+                (<span>You are premium</span>)
+            }
+
         </ThemeContext.Provider>
     );
 }
