@@ -1,27 +1,29 @@
-import React from 'react';
+import React, {useContext, useLayoutEffect, useRef, useState} from 'react';
 import ThemeContext from "./ThemeContext";
+import useFocusOnMount from "./useFocusOnMount";
 
-class Amount extends React.Component {
-    static contextType = ThemeContext;
+export default (props) => {
 
-    changeValue = event => {
+    const context = useContext(ThemeContext);
+    const [negative, setNegative] = useState(false);
+
+    const changeValue = event => {
         const value = event.currentTarget.value;
-        this.setState({isNegative: value < 0});
-        this.props.onChange(value)
+        setNegative(value < 0);
+        props.onChange(value)
     };
 
-    render() {
-        const {value} = this.props;
+    const {value} = props;
 
-        return (
-            <div style={{backgroundColor: this.context.theme === 'light' ? 'white' : 'gray'}}>
-                <label htmlFor="amount">{this.props.name}</label>
-                <input id="amount" type="number" onChange={this.changeValue} value={value}
-                       disabled={this.props.disabled}
-                       style={{border: this.state && this.state.isNegative ? '1px solid red' : ''}}/>
-            </div>
-        );
-    }
+    const inputFocus = useFocusOnMount();
+
+    return (
+        <div style={{backgroundColor: context.theme === 'light' ? 'white' : 'gray'}}>
+            <label htmlFor="amount">{props.name}</label>
+            <input id="amount" type="number" onChange={changeValue} value={value}
+                   ref={props.focusOnMount ? inputFocus : null}
+                   disabled={props.disabled}
+                   style={{border: negative ? '1px solid red' : ''}}/>
+        </div>
+    );
 }
-
-export default Amount;

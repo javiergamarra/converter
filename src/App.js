@@ -2,12 +2,20 @@ import React, {useState} from 'react';
 import './App.css';
 import ThemeContext from "./ThemeContext";
 import Converter from "./Converter";
+import usePreferredColorScheme from "./usePreferredColorScheme";
+import useCachedState from "./useCachedState";
 
 function App() {
 
-    const [premium, setPremium] = useState(false);
-    const [theme, setTheme] = useState('light');
+    const [premium, setPremium] = useCachedState('premium');
+    const [theme, setTheme] = useCachedState('theme');
+
     const [maxConversions, setMaxConversions] = useState(false);
+    const color = usePreferredColorScheme();
+
+    if (color !== theme) {
+        setTheme(color);
+    }
 
     let conversions = 5;
 
@@ -30,7 +38,7 @@ function App() {
 
             <Converter cryptoName={"BTC"} header={"My BTC Converter"} exchangeRate={2} onChange={onChange}/>
 
-            <Converter cryptoName={"ETH"} exchangeRate={1.2} onChange={onChange}/>
+            <Converter cryptoName={"ETH"} exchangeRate={1.2} onChange={onChange} focusOnMount/>
 
             {!premium ?
                 (<button onClick={() => setPremium(true)}>Become Premium</button>) :
