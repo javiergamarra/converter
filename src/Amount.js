@@ -1,4 +1,4 @@
-import React, {useContext, useLayoutEffect, useRef, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import ThemeContext from "./ThemeContext";
 import useFocusOnMount from "./useFocusOnMount";
 
