@@ -9,7 +9,9 @@ export default (props) => {
 
     const onChange = value => {
         setValue(value);
-        props.onChange(true);
+        if (props.onChange) {
+            props.onChange(true);
+        }
     };
 
     return (

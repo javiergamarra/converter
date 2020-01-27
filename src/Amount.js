@@ -19,11 +19,13 @@ export default (props) => {
 
     return (
         <div style={{backgroundColor: context.theme === 'light' ? 'white' : 'gray'}}>
-            <label htmlFor="amount">{props.name}</label>
-            <input id="amount" type="number" onChange={changeValue} value={value}
-                   ref={props.focusOnMount ? inputFocus : null}
-                   disabled={props.disabled}
-                   style={{border: negative ? '1px solid red' : ''}}/>
+            <label>
+                {props.name}
+                <input type="number" onChange={changeValue} value={value}
+                       ref={props.focusOnMount ? inputFocus : null}
+                       disabled={props.disabled}
+                       style={{border: negative ? '1px solid red' : ''}}/>
+            </label>
         </div>
     );
 }
